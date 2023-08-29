@@ -11,7 +11,7 @@ export default function chatHandler(sessionId: string, event: BaileysEventEmitte
 
   const set: BaileysEventHandler<'messaging-history.set'> = async ({ chats, isLatest }) => {
     try {
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx:any) => {
         if (isLatest) await tx.chat.deleteMany({ where: { sessionId } });
 
         const existingIds = (
@@ -19,7 +19,7 @@ export default function chatHandler(sessionId: string, event: BaileysEventEmitte
             select: { id: true },
             where: { id: { in: chats.map((c) => c.id) }, sessionId },
           })
-        ).map((i) => i.id);
+        ).map((i:any) => i.id);
         const chatsAdded = (
           await tx.chat.createMany({
             data: chats

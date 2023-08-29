@@ -17,7 +17,7 @@ export default function contactHandler(sessionId: string, event: BaileysEventEmi
           select: { id: true },
           where: { id: { notIn: contactIds }, sessionId },
         })
-      ).map((c) => c.id);
+      ).map((c:any) => c.id);
 
       const upsertPromises = contacts
         .map((c) => transformPrisma(c))

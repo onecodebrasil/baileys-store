@@ -19,7 +19,7 @@ export default function messageHandler(sessionId: string, event: BaileysEventEmi
 
   const set: BaileysEventHandler<'messaging-history.set'> = async ({ messages, isLatest }) => {
     try {
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx:any) => {
         if (isLatest) await tx.message.deleteMany({ where: { sessionId } });
 
         await tx.message.createMany({
@@ -73,7 +73,7 @@ export default function messageHandler(sessionId: string, event: BaileysEventEmi
   const update: BaileysEventHandler<'messages.update'> = async (updates) => {
     for (const { update, key } of updates) {
       try {
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx:any) => {
           const prevData = await tx.message.findFirst({
             where: { id: key.id!, remoteJid: key.remoteJid!, sessionId },
           });
@@ -127,7 +127,7 @@ export default function messageHandler(sessionId: string, event: BaileysEventEmi
   const updateReceipt: BaileysEventHandler<'message-receipt.update'> = async (updates) => {
     for (const { key, receipt } of updates) {
       try {
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx:any) => {
           const message = await tx.message.findFirst({
             select: { userReceipt: true },
             where: { id: key.id!, remoteJid: key.remoteJid!, sessionId },
@@ -162,7 +162,7 @@ export default function messageHandler(sessionId: string, event: BaileysEventEmi
   const updateReaction: BaileysEventHandler<'messages.reaction'> = async (reactions) => {
     for (const { key, reaction } of reactions) {
       try {
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx:any) => {
           const message = await tx.message.findFirst({
             select: { reactions: true },
             where: { id: key.id!, remoteJid: key.remoteJid!, sessionId },
