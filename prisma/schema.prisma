@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "mongo"
+  url      = env("MONGODB_URL")
 }
 
 model Chat {
-  pkId                      BigInt   @id @default(autoincrement())
+  pkId                      BigInt   @id @default(auto())
   sessionId                 String
   archived                  Boolean?
   contactPrimaryIdentityKey Bytes?
@@ -62,7 +62,7 @@ model Chat {
 }
 
 model Contact {
-  pkId         BigInt  @id @default(autoincrement())
+  pkId         BigInt  @id @default(auto())
   sessionId    String
   id           String
   name         String?
@@ -76,7 +76,7 @@ model Contact {
 }
 
 model Message {
-  pkId                            BigInt   @id @default(autoincrement())
+  pkId                            BigInt   @id @default(auto())
   sessionId                       String
   remoteJid                       String
   id                              String
@@ -129,10 +129,10 @@ model Message {
 }
 
 model Session {
-  pkId      BigInt @id @default(autoincrement())
+  pkId      BigInt @id @default(auto())
   sessionId String
   id        String
-  data      String @db.Text
+  data      String
 
   @@unique([sessionId, id], map: "unique_id_per_session_id_session")
   @@index([sessionId])
